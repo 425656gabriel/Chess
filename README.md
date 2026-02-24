@@ -7,3 +7,8 @@ They can also reopen past quizzes, take them, and see their score at the end. Th
 [Midpage](https://github.com/425656gabriel/App-Ideas/blob/main/docs/midpage.pdf)
 [endpage](https://github.com/425656gabriel/App-Ideas/blob/main/docs/theendpage.pdf)
 [Classdiagram](https://github.com/425656gabriel/App-Ideas/blob/main/docs/classdiagram.pdf)
+
+## Chess
+
+This is a chess simulator. You can choose the difficulty and improve your chess skills.
+
