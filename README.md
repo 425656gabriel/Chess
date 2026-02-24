@@ -12,6 +12,10 @@ They can also reopen past quizzes, take them, and see their score at the end. Th
 
 This is a chess simulator. You can choose the difficulty and improve your chess skills.
 
+UML Diagram:
+![]()
+
+Gameplay:
 ![Start Screen](https://github.com/425656gabriel/App-Ideas/blob/main/Chess/src/GUI%20Mockups/Start%20Screen.png)
 ![Main Screen](https://github.com/425656gabriel/App-Ideas/blob/main/Chess/src/GUI%20Mockups/Mainscreen.png)
-![]()
+![End Screen](https://github.com/425656gabriel/App-Ideas/blob/main/Chess/src/GUI%20Mockups/End%20Screen.png)
