@@ -7,7 +7,7 @@ UML Diagram:
 ![class Diagram](https://github.com/425656gabriel/App-Ideas/blob/main/1771956874024-41a1e304-07bd-41e1-bf8a-6292a9ba2d93_1.png)
 
 Gameplay:
-![Start Screen]([https://github.com/425656gabriel/App-Ideas/blob/main/Chess/src/GUI%20Mockups/Start%20Screen.png](https://github.com/425656gabriel/App-Ideas/blob/main/HOmaepage.png))
+![Start Screen](https://github.com/425656gabriel/App-Ideas/blob/main/HOmaepage.png)
 ![Main Screen](https://github.com/425656gabriel/App-Ideas/blob/main/midpage.png)
 ![End Screen](https://github.com/425656gabriel/App-Ideas/blob/main/theendpage.png)
 
