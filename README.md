@@ -1,4 +1,4 @@
-# Chess
+# App brainstorming
 
 #Quiz Maker
 QuizMaker is an app that lets users create, save, and take their own quizzes. Users can add questions with multiple-choice answers and store quizzes to use later.
