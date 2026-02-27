@@ -1,19 +1,37 @@
 public class King extends Piece {
-    public King(Color color, Position position) {
-        super(color, position);
+    
+    public King(boolean isWhite, int x, int y) {
+        super(isWhite, x, y);
     }
 
     @Override
-    public boolean isValidMove(Position newPosition, Board board) {
-        int xDiff = Math.abs(newPosition.getX() - this.position.getX());
-        int yDiff = Math.abs(newPosition.getY() - this.position.getY());
-        
-        // Basic King Move: 1 square in any direction
+    public boolean isValidMove(Board board, int endX, int endY) {
+        int xDiff = Math.abs(endX - this.x);
+        int yDiff = Math.abs(endY - this.y);
+
+        // 1. Check if the move is physically possible for a King (1 square)
         if (xDiff <= 1 && yDiff <= 1) {
-            return !board.isSquareAttacked(newPosition, this.color.opposite());
+            
+            // 2. Prevent the King from staying in the same spot
+            if (xDiff == 0 && yDiff == 0) return false;
+
+            // 3. Prevent "Friendly Fire" (don't land on your own piece)
+            Piece target = board.getPieceAt(endX, endY);
+            if (target != null && target.isWhite() == this.isWhite) {
+                return false; 
+            }
+
+            // 4. Safety Check: King cannot move into danger (Check)
+            // We pass the opposite color to see if enemies attack that square
+            if (board.isSquareAttacked(endX, endY, !this.isWhite)) {
+                return false;
+            }
+
+            return true;
         }
-        // Add castling logic here
-        return false;
+
+        return false; // Move was more than 1 square
     }
 }
+
 
