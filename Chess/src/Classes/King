@@ -1,5 +1,4 @@
 public class King extends Piece {
-    
     public King(boolean isWhite, int x, int y) {
         super(isWhite, x, y);
     }
@@ -9,29 +8,22 @@ public class King extends Piece {
         int xDiff = Math.abs(endX - this.x);
         int yDiff = Math.abs(endY - this.y);
 
-        // 1. Check if the move is physically possible for a King (1 square)
+        // King moves only 1 square
         if (xDiff <= 1 && yDiff <= 1) {
-            
-            // 2. Prevent the King from staying in the same spot
+            // Cannot stay in the same square
             if (xDiff == 0 && yDiff == 0) return false;
 
-            // 3. Prevent "Friendly Fire" (don't land on your own piece)
+            // Check what is at the destination using the Board's logic
             Piece target = board.getPieceAt(endX, endY);
-            if (target != null && target.isWhite() == this.isWhite) {
-                return false; 
+            
+            // If square is empty OR has an enemy, move is valid
+            if (target == null || target.isWhite() != this.isWhite) {
+                return true; 
             }
-
-            // 4. Safety Check: King cannot move into danger (Check)
-            // We pass the opposite color to see if enemies attack that square
-            if (board.isSquareAttacked(endX, endY, !this.isWhite)) {
-                return false;
-            }
-
-            return true;
         }
-
-        return false; // Move was more than 1 square
+        return false;
     }
 }
+
 
 
