@@ -1,1 +1,6 @@
-
+public class Chess {
+    // This makes the board
+    public static void main(String[] args) {
+        new Board();
+    }
+}
