@@ -3,7 +3,7 @@ import java.awt.*;
 
 public class Board extends JFrame {
     private JButton[][] buttons = new JButton[8][8];
-    private Piece[][] logicBoard = new Piece[8][8]; // Stores the actual King objects
+    private Piece[][] logicBoard = new Piece[8][8]; // The internal logic grid
 
     public Board() {
         setTitle("Chess Game");
@@ -25,26 +25,30 @@ public class Board extends JFrame {
             }
         }
 
-        // Place the Kings in the logic array and update the buttons
         setupInitialPieces();
-
         add(grid);
         setVisible(true);
     }
 
     private void setupInitialPieces() {
-        // Black King at top
-        logicBoard[0][4] = new King(false, 0, 4);
-        buttons[0][4].setText("BK"); // Placeholder for an icon
+        // Place Kings in the logic array
+        logicBoard[0][4] = new King(false, 0, 4); // Black
+        buttons[0][4].setText("BK");
         
-        // White King at bottom
-        logicBoard[7][4] = new King(true, 7, 4);
+        logicBoard[7][4] = new King(true, 7, 4);  // White
         buttons[7][4].setText("WK");
     }
 
-    // Helper method so the King can "see" other pieces
-    public Piece getPieceAt(int x, int y) {
-        return logicBoard[x][y];
+    /**
+     * This is the fix! It allows the King class to check 
+     * what piece is on a specific square.
+     */
+    public Piece getPieceAt(int row, int col) {
+        // Check if the coordinates are actually on the board
+        if (row < 0 || row >= 8 || col < 0 || col >= 8) {
+            return null;
+        }
+        return logicBoard[row][col];
     }
 
     public static void main(String[] args) {
