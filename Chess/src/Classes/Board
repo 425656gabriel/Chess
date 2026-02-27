@@ -1,1 +1,35 @@
+import javax.swing.*;
+import java.awt.*;
 
+public class Board extends JFrame {
+    public Board() {
+        setTitle("Chess Board");
+        setSize(600, 600);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+        // Makes the 8x8 board
+        JPanel board = new JPanel(new GridLayout(8, 8));
+
+        for (int rows = 0; rows < 8; rows++) {
+            for (int col = 0; col < 8; col++) {
+                JButton box = new JButton();
+                
+                // Box colors logic
+                if ((rows + col) % 2 == 0) {
+                    box.setBackground(Color.WHITE);
+                } else {
+                    box.setBackground(new Color(119, 148, 85)); // Un verde clásico
+                }
+                
+                // Erase borders
+                box.setOpaque(true);
+                box.setBorderPainted(false);
+                
+                board.add(box);
+            }
+        }
+        
+        add(board);
+        setVisible(true);
+    }
+}
