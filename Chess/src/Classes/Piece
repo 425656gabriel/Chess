@@ -1,6 +1,6 @@
 public abstract class Piece {
     protected boolean isWhite;
-    protected int x, y; // Adding these allows the Piece to know its location
+    protected int x, y; // Current position on the grid
 
     public Piece(boolean isWhite, int x, int y) {
         this.isWhite = isWhite;
@@ -9,9 +9,13 @@ public abstract class Piece {
     }
 
     public boolean isWhite() { return isWhite; }
-    
     public boolean isBlack() { return !isWhite; }
+    
+    public void setPosition(int x, int y) {
+        this.x = x;
+        this.y = y;
+    }
 
-    // Every piece will use this to define its unique movement math
+    // Every piece (King, Rook, etc.) must implement this math
     public abstract boolean isValidMove(Board board, int endX, int endY);
 }
