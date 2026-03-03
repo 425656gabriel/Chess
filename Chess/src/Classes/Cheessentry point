@@ -1,1 +1,7 @@
+public class Chess {
+    // REQUIRED OBJECTIVE: Runnable entry point
+    public static void main(String[] args) {
+        new Board(); // Launches objects onto the screen
+    }
+}
 
