@@ -1,6 +1,140 @@
-public class Chess {
-    // This makes the board
-    public static void main(String[] args) {
-        new Board();
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.*;
+
+public class Board extends JFrame implements ActionListener {
+    // 1. DATA & STATE
+    private JButton[][] buttons = new JButton[8][8];
+    private String[][] logicBoard = new String[8][8]; // Stores "WK", "BQ", etc.
+    private boolean whiteTurn = true;
+    private int selectedR = -1, selectedC = -1;
+
+    public Board() {
+        setTitle("Chess - White's Turn");
+        setSize(600, 600);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        JPanel grid = new JPanel(new GridLayout(8, 8));
+
+        for (int r = 0; r < 8; r++) {
+            for (int c = 0; c < 8; c++) {
+                buttons[r][c] = new JButton();
+                if ((r + c) % 2 == 0) buttons[r][c].setBackground(Color.WHITE);
+                else buttons[r][c].setBackground(new Color(119, 148, 85));
+                buttons[r][c].addActionListener(this);
+                grid.add(buttons[r][c]);
+            }
+        }
+        setupBoard();
+        add(grid);
+        setVisible(true);
     }
+
+    private void setupBoard() {
+        // Simple setup for demo: Kings and Queens
+        logicBoard[0][4] = "BK"; logicBoard[0][3] = "BQ";
+        logicBoard[7][4] = "WK"; logicBoard[7][3] = "WQ";
+        updateUI();
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        JButton clicked = (JButton) e.getSource();
+        int r = -1, c = -1;
+        for(int i=0; i<8; i++) for(int j=0; j<8; j++) if(buttons[i][j] == clicked) { r=i; c=j; }
+
+        if (selectedR == -1) {
+            // SELECT PIECE
+            String piece = logicBoard[r][c];
+            if (piece != null && ((whiteTurn && piece.startsWith("W")) || (!whiteTurn && piece.startsWith("B")))) {
+                selectedR = r; selectedC = c;
+                buttons[r][c].setBorder(BorderFactory.createLineBorder(Color.YELLOW, 4));
+            }
+        } else {
+            // MOVE PIECE
+            if (isValidMove(selectedR, selectedC, r, c)) {
+                String originalTarget = logicBoard[r][c];
+                String mover = logicBoard[selectedR][selectedC];
+                
+                // EXECUTE MOVE
+                logicBoard[r][c] = mover;
+                logicBoard[selectedR][selectedC] = null;
+
+                // CHECK RULE: You cannot move into check!
+                if (isCheck(whiteTurn)) {
+                    // UNDO MOVE
+                    logicBoard[selectedR][selectedC] = mover;
+                    logicBoard[r][c] = originalTarget;
+                    JOptionPane.showMessageDialog(this, "Illegal: King would be in Check!");
+                } else {
+                    whiteTurn = !whiteTurn;
+                    setTitle("Chess - " + (whiteTurn ? "White's Turn" : "Black's Turn"));
+                }
+            }
+            selectedR = -1; selectedC = -1;
+            updateUI();
+        }
+    }
+
+    // ALL RULES IN ONE PLACE
+    public boolean isValidMove(int sr, int sc, int er, int ec) {
+        if (sr == er && sc == ec) return false;
+        String p = logicBoard[sr][sc];
+        String target = logicBoard[er][ec];
+
+        // RULE: Cannot hit own color
+        if (target != null && target.charAt(0) == p.charAt(0)) return false;
+
+        int rowDiff = Math.abs(er - sr);
+        int colDiff = Math.abs(ec - sc);
+
+        // KING RULES
+        if (p.endsWith("K")) return rowDiff <= 1 && colDiff <= 1;
+
+        // QUEEN RULES (Straight or Diagonal)
+        if (p.endsWith("Q")) {
+            if (sr == er || sc == ec || rowDiff == colDiff) return isPathClear(sr, sc, er, ec);
+        }
+        return false;
+    }
+
+    private boolean isPathClear(int sr, int sc, int er, int ec) {
+        int rStep = Integer.compare(er, sr);
+        int cStep = Integer.compare(ec, sc);
+        int r = sr + rStep;
+        int c = sc + cStep;
+        while (r != er || c != ec) {
+            if (logicBoard[r][c] != null) return false;
+            r += rStep; c += cStep;
+        }
+        return true;
+    }
+
+    // CHECKMATE LOGIC: Is the king under attack?
+    public boolean isCheck(boolean forWhite) {
+        int kr = -1, kc = -1;
+        String kingToFind = forWhite ? "WK" : "BK";
+        for(int i=0; i<8; i++) for(int j=0; j<8; j++) if(kingToFind.equals(logicBoard[i][j])) { kr=i; kc=j; }
+
+        // Scan all enemy pieces to see if any can hit the king
+        for(int i=0; i<8; i++) {
+            for(int j=0; j<8; j++) {
+                String p = logicBoard[i][j];
+                if (p != null && ((forWhite && p.startsWith("B")) || (!forWhite && p.startsWith("W")))) {
+                    if (isValidMove(i, j, kr, kc)) return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    private void updateUI() {
+        for (int i = 0; i < 8; i++) {
+            for (int j = 0; j < 8; j++) {
+                buttons[i][j].setText(logicBoard[i][j] == null ? "" : logicBoard[i][j]);
+                buttons[i][j].setBorder(null);
+            }
+        }
+    }
+
+    public static void main(String[] args) { new Board(); }
 }
