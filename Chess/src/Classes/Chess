@@ -3,7 +3,7 @@ import java.awt.*;
 import java.awt.event.*;
 
 public class Board extends JFrame implements ActionListener {
-    // 1. DATA & STATE
+    
     private JButton[][] buttons = new JButton[8][8];
     private String[][] logicBoard = new String[8][8]; // Stores "WK", "BQ", etc.
     private boolean whiteTurn = true;
@@ -30,7 +30,7 @@ public class Board extends JFrame implements ActionListener {
     }
 
     private void setupBoard() {
-        // Simple setup for demo: Kings and Queens
+        
         logicBoard[0][4] = "BK"; logicBoard[0][3] = "BQ";
         logicBoard[7][4] = "WK"; logicBoard[7][3] = "WQ";
         updateUI();
@@ -43,19 +43,19 @@ public class Board extends JFrame implements ActionListener {
         for(int i=0; i<8; i++) for(int j=0; j<8; j++) if(buttons[i][j] == clicked) { r=i; c=j; }
 
         if (selectedR == -1) {
-            // SELECT PIECE
+         
             String piece = logicBoard[r][c];
             if (piece != null && ((whiteTurn && piece.startsWith("W")) || (!whiteTurn && piece.startsWith("B")))) {
                 selectedR = r; selectedC = c;
                 buttons[r][c].setBorder(BorderFactory.createLineBorder(Color.YELLOW, 4));
             }
         } else {
-            // MOVE PIECE
+         
             if (isValidMove(selectedR, selectedC, r, c)) {
                 String originalTarget = logicBoard[r][c];
                 String mover = logicBoard[selectedR][selectedC];
                 
-                // EXECUTE MOVE
+               
                 logicBoard[r][c] = mover;
                 logicBoard[selectedR][selectedC] = null;
 
@@ -75,22 +75,22 @@ public class Board extends JFrame implements ActionListener {
         }
     }
 
-    // ALL RULES IN ONE PLACE
+    
     public boolean isValidMove(int sr, int sc, int er, int ec) {
         if (sr == er && sc == ec) return false;
         String p = logicBoard[sr][sc];
         String target = logicBoard[er][ec];
 
-        // RULE: Cannot hit own color
+        
         if (target != null && target.charAt(0) == p.charAt(0)) return false;
 
         int rowDiff = Math.abs(er - sr);
         int colDiff = Math.abs(ec - sc);
 
-        // KING RULES
+        
         if (p.endsWith("K")) return rowDiff <= 1 && colDiff <= 1;
 
-        // QUEEN RULES (Straight or Diagonal)
+        
         if (p.endsWith("Q")) {
             if (sr == er || sc == ec || rowDiff == colDiff) return isPathClear(sr, sc, er, ec);
         }
@@ -109,13 +109,13 @@ public class Board extends JFrame implements ActionListener {
         return true;
     }
 
-    // CHECKMATE LOGIC: Is the king under attack?
+    
     public boolean isCheck(boolean forWhite) {
         int kr = -1, kc = -1;
         String kingToFind = forWhite ? "WK" : "BK";
         for(int i=0; i<8; i++) for(int j=0; j<8; j++) if(kingToFind.equals(logicBoard[i][j])) { kr=i; kc=j; }
 
-        // Scan all enemy pieces to see if any can hit the king
+        
         for(int i=0; i<8; i++) {
             for(int j=0; j<8; j++) {
                 String p = logicBoard[i][j];
