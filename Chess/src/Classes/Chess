@@ -2,17 +2,68 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 
+// --- PIECE OBJECTS WITH REQUIRED METHODS ---
+abstract class Piece {
+    protected int r, c;
+    protected boolean isWhite;
+    protected String type;
+
+    public Piece(boolean isWhite, int r, int c, String type) {
+        this.isWhite = isWhite; this.r = r; this.c = c; this.type = type;
+    }
+
+    // OBJECTIVE: Functional display() method
+    public void display(JButton button) {
+        button.setText((isWhite ? "W" : "B") + type);
+        button.setFont(new Font("Arial", Font.BOLD, 20));
+        button.setForeground(isWhite ? Color.BLUE : Color.RED);
+    }
+
+    // OBJECTIVE: Behavioral move() method
+    public void move(int newR, int newC) {
+        this.r = newR;
+        this.c = newC;
+    }
+
+    public abstract boolean isValidMove(int er, int ec, Piece[][] board);
+}
+
+class King extends Piece {
+    public King(boolean isW, int r, int c) { super(isW, r, c, "K"); }
+    public boolean isValidMove(int er, int ec, Piece[][] b) {
+        return Math.abs(er - r) <= 1 && Math.abs(ec - c) <= 1;
+    }
+}
+
+class Queen extends Piece {
+    public Queen(boolean isW, int r, int c) { super(isW, r, c, "Q"); }
+    public boolean isValidMove(int er, int ec, Piece[][] b) {
+        int rDiff = Math.abs(er - r), cDiff = Math.abs(ec - c);
+        if (r == er || c == ec || rDiff == cDiff) {
+            // Path checking logic inside the object behavior
+            int rStep = Integer.compare(er, r), cStep = Integer.compare(ec, c);
+            int currR = r + rStep, currC = c + cStep;
+            while (currR != er || currC != ec) {
+                if (b[currR][currC] != null) return false;
+                currR += rStep; currC += cStep;
+            }
+            return true;
+        }
+        return false;
+    }
+}
+
+// --- BOARD & CHESS ENTRY POINT ---
 public class Board extends JFrame implements ActionListener {
-    
     private JButton[][] buttons = new JButton[8][8];
-    private String[][] logicBoard = new String[8][8]; // Stores "WK", "BQ", etc.
+    private Piece[][] logicBoard = new Piece[8][8]; // OBJECTIVE: Collection of Objects
     private boolean whiteTurn = true;
-    private int selectedR = -1, selectedC = -1;
+    private Piece selectedPiece = null;
 
     public Board() {
         setTitle("Chess - White's Turn");
         setSize(600, 600);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(EXIT_ON_CLOSE);
         JPanel grid = new JPanel(new GridLayout(8, 8));
 
         for (int r = 0; r < 8; r++) {
@@ -30,9 +81,11 @@ public class Board extends JFrame implements ActionListener {
     }
 
     private void setupBoard() {
-        
-        logicBoard[0][4] = "BK"; logicBoard[0][3] = "BQ";
-        logicBoard[7][4] = "WK"; logicBoard[7][3] = "WQ";
+        // OBJECTIVE: Object Instantiation
+        logicBoard[0][4] = new King(false, 0, 4);
+        logicBoard[0][3] = new Queen(false, 0, 3);
+        logicBoard[7][4] = new King(true, 7, 4);
+        logicBoard[7][3] = new Queen(true, 7, 3);
         updateUI();
     }
 
@@ -42,87 +95,53 @@ public class Board extends JFrame implements ActionListener {
         int r = -1, c = -1;
         for(int i=0; i<8; i++) for(int j=0; j<8; j++) if(buttons[i][j] == clicked) { r=i; c=j; }
 
-        if (selectedR == -1) {
-         
-            String piece = logicBoard[r][c];
-            if (piece != null && ((whiteTurn && piece.startsWith("W")) || (!whiteTurn && piece.startsWith("B")))) {
-                selectedR = r; selectedC = c;
+        if (selectedPiece == null) {
+            Piece p = logicBoard[r][c];
+            if (p != null && p.isWhite == whiteTurn) {
+                selectedPiece = p;
                 buttons[r][c].setBorder(BorderFactory.createLineBorder(Color.YELLOW, 4));
             }
         } else {
-         
-            if (isValidMove(selectedR, selectedC, r, c)) {
-                String originalTarget = logicBoard[r][c];
-                String mover = logicBoard[selectedR][selectedC];
-                
-               
-                logicBoard[r][c] = mover;
-                logicBoard[selectedR][selectedC] = null;
-
-                // CHECK RULE: You cannot move into check!
-                if (isCheck(whiteTurn)) {
-                    // UNDO MOVE
-                    logicBoard[selectedR][selectedC] = mover;
-                    logicBoard[r][c] = originalTarget;
-                    JOptionPane.showMessageDialog(this, "Illegal: King would be in Check!");
-                } else {
-                    whiteTurn = !whiteTurn;
-                    setTitle("Chess - " + (whiteTurn ? "White's Turn" : "Black's Turn"));
+            if (selectedPiece.isValidMove(r, c, logicBoard)) {
+                Piece target = logicBoard[r][c];
+                // Opposing color check
+                if (target == null || target.isWhite != selectedPiece.isWhite) {
+                    executeLogicMove(selectedPiece, r, c);
                 }
             }
-            selectedR = -1; selectedC = -1;
+            selectedPiece = null;
             updateUI();
         }
     }
 
-    
-    public boolean isValidMove(int sr, int sc, int er, int ec) {
-        if (sr == er && sc == ec) return false;
-        String p = logicBoard[sr][sc];
-        String target = logicBoard[er][ec];
-
+    private void executeLogicMove(Piece p, int nr, int nc) {
+        int oldR = p.r, oldC = p.c;
+        Piece temp = logicBoard[nr][nc];
         
-        if (target != null && target.charAt(0) == p.charAt(0)) return false;
+        logicBoard[oldR][oldC] = null;
+        p.move(nr, nc); // OBJECTIVE: Behavioral move call
+        logicBoard[nr][nc] = p;
 
-        int rowDiff = Math.abs(er - sr);
-        int colDiff = Math.abs(ec - sc);
-
-        
-        if (p.endsWith("K")) return rowDiff <= 1 && colDiff <= 1;
-
-        
-        if (p.endsWith("Q")) {
-            if (sr == er || sc == ec || rowDiff == colDiff) return isPathClear(sr, sc, er, ec);
+        if (isCheck(whiteTurn)) {
+            p.move(oldR, oldC); // Undo move
+            logicBoard[oldR][oldC] = p;
+            logicBoard[nr][nc] = temp;
+            JOptionPane.showMessageDialog(this, "Illegal: King in Check!");
+        } else {
+            whiteTurn = !whiteTurn;
+            setTitle("Chess - " + (whiteTurn ? "White's Turn" : "Black's Turn"));
         }
-        return false;
     }
 
-    private boolean isPathClear(int sr, int sc, int er, int ec) {
-        int rStep = Integer.compare(er, sr);
-        int cStep = Integer.compare(ec, sc);
-        int r = sr + rStep;
-        int c = sc + cStep;
-        while (r != er || c != ec) {
-            if (logicBoard[r][c] != null) return false;
-            r += rStep; c += cStep;
-        }
-        return true;
-    }
-
-    
-    public boolean isCheck(boolean forWhite) {
+    public boolean isCheck(boolean white) {
         int kr = -1, kc = -1;
-        String kingToFind = forWhite ? "WK" : "BK";
-        for(int i=0; i<8; i++) for(int j=0; j<8; j++) if(kingToFind.equals(logicBoard[i][j])) { kr=i; kc=j; }
-
+        for(int i=0; i<8; i++) for(int j=0; j<8; j++) 
+            if(logicBoard[i][j] instanceof King && logicBoard[i][j].isWhite == white) { kr=i; kc=j; }
         
-        for(int i=0; i<8; i++) {
-            for(int j=0; j<8; j++) {
-                String p = logicBoard[i][j];
-                if (p != null && ((forWhite && p.startsWith("B")) || (!forWhite && p.startsWith("W")))) {
-                    if (isValidMove(i, j, kr, kc)) return true;
-                }
-            }
+        for(int i=0; i<8; i++) for(int j=0; j<8; j++) {
+            Piece enemy = logicBoard[i][j];
+            if (enemy != null && enemy.isWhite != white) 
+                if (enemy.isValidMove(kr, kc, logicBoard)) return true;
         }
         return false;
     }
@@ -130,11 +149,13 @@ public class Board extends JFrame implements ActionListener {
     private void updateUI() {
         for (int i = 0; i < 8; i++) {
             for (int j = 0; j < 8; j++) {
-                buttons[i][j].setText(logicBoard[i][j] == null ? "" : logicBoard[i][j]);
+                buttons[i][j].setText("");
                 buttons[i][j].setBorder(null);
+                if (logicBoard[i][j] != null) logicBoard[i][j].display(buttons[i][j]); // OBJECTIVE: Functional display call
             }
         }
     }
 
+    // OBJECTIVE: Runnable entry point
     public static void main(String[] args) { new Board(); }
 }
