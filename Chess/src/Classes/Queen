@@ -8,13 +8,13 @@ public class Queen extends Piece {
         int xDiff = Math.abs(endX - this.x);
         int yDiff = Math.abs(endY - this.y);
 
-        // Valid if moving in a straight line (Rook-like) OR a perfect diagonal (Bishop-like)
+   
         boolean isStraight = (this.x == endX || this.y == endY);
         boolean isDiagonal = (xDiff == yDiff);
 
         if (!isStraight && !isDiagonal) return false;
 
-        // Path checking: Ensure no pieces are blocking the way
+
         int xDir = Integer.compare(endX, this.x);
         int yDir = Integer.compare(endY, this.y);
 
@@ -27,7 +27,7 @@ public class Queen extends Piece {
             curY += yDir;
         }
 
-        // Final check: Destination must be empty or contain an enemy
+
         Piece target = board.getPieceAt(endX, endY);
         return target == null || target.isWhite() != this.isWhite;
     }
