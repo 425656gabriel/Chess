@@ -1,12 +1,11 @@
-import javax.swing.*;
-import java.awt.*;
-
 public class Board extends JFrame {
     private JButton[][] buttons = new JButton[8][8];
-    private Piece[][] logicBoard = new Piece[8][8]; // The internal logic grid
+    private Piece[][] logicBoard = new Piece[8][8]; // OBJECTIVE: Object Collection
+    private Piece selectedPiece = null;
+    private boolean whiteTurn = true;
 
     public Board() {
-        setTitle("Chess Game");
+        setTitle("Chess Game - White's Turn");
         setSize(600, 600);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         JPanel grid = new JPanel(new GridLayout(8, 8));
@@ -14,44 +13,64 @@ public class Board extends JFrame {
         for (int r = 0; r < 8; r++) {
             for (int c = 0; c < 8; c++) {
                 buttons[r][c] = new JButton();
-                
-                // Classic Green/White theme
                 if ((r + c) % 2 == 0) buttons[r][c].setBackground(Color.WHITE);
                 else buttons[r][c].setBackground(new Color(119, 148, 85));
                 
-                buttons[r][c].setOpaque(true);
-                buttons[r][c].setBorderPainted(false);
+                final int finalR = r, finalC = c;
+                buttons[r][c].addActionListener(e -> handleInput(finalR, finalC));
                 grid.add(buttons[r][c]);
             }
         }
-
         setupInitialPieces();
+        updateUI();
         add(grid);
         setVisible(true);
     }
 
     private void setupInitialPieces() {
-        // Place Kings in the logic array
-        logicBoard[0][4] = new King(false, 0, 4); // Black
-        buttons[0][4].setText("BK");
-        
-        logicBoard[7][4] = new King(true, 7, 4);  // White
-        buttons[7][4].setText("WK");
+        // OBJECTIVE: Object Instantiation
+        logicBoard[0][4] = new King(false, 0, 4);
+        logicBoard[0][3] = new Queen(false, 0, 3);
+        logicBoard[7][4] = new King(true, 7, 4);
+        logicBoard[7][3] = new Queen(true, 7, 3);
     }
 
-    /**
-     * This is the fix! It allows the King class to check 
-     * what piece is on a specific square.
-     */
-    public Piece getPieceAt(int row, int col) {
-        // Check if the coordinates are actually on the board
-        if (row < 0 || row >= 8 || col < 0 || col >= 8) {
-            return null;
+    private void handleInput(int r, int c) {
+        if (selectedPiece == null) {
+            Piece p = logicBoard[r][c];
+            if (p != null && p.isWhite == whiteTurn) {
+                selectedPiece = p;
+                buttons[r][c].setBorder(BorderFactory.createLineBorder(Color.YELLOW, 4));
+            }
+        } else {
+            if (selectedPiece.isValidMove(this, r, c)) {
+                // REQUIRED OBJECTIVE: Call behavioral move()
+                logicBoard[selectedPiece.x][selectedPiece.y] = null;
+                selectedPiece.move(r, c); 
+                logicBoard[r][c] = selectedPiece;
+                whiteTurn = !whiteTurn;
+                setTitle("Chess Game - " + (whiteTurn ? "White's Turn" : "Black's Turn"));
+            }
+            selectedPiece = null;
+            updateUI();
         }
-        return logicBoard[row][col];
     }
 
-    public static void main(String[] args) {
-        new Board();
+    private void updateUI() {
+        for (int i = 0; i < 8; i++) {
+            for (int j = 0; j < 8; j++) {
+                buttons[i][j].setText("");
+                buttons[i][j].setBorder(null);
+                if (logicBoard[i][j] != null) {
+                    // REQUIRED OBJECTIVE: Call functional display()
+                    logicBoard[i][j].display(buttons[i][j]);
+                }
+            }
+        }
+    }
+
+    public Piece getPieceAt(int r, int c) {
+        if (r < 0 || r >= 8 || c < 0 || c >= 8) return null;
+        return logicBoard[r][c];
     }
 }
