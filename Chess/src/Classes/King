@@ -1,29 +1,13 @@
 public class King extends Piece {
-    public King(boolean isWhite, int x, int y) {
-        super(isWhite, x, y);
-    }
-
+    public King(boolean isWhite, int x, int y) { super(isWhite, x, y); }
     @Override
     public boolean isValidMove(Board board, int endX, int endY) {
         int xDiff = Math.abs(endX - this.x);
         int yDiff = Math.abs(endY - this.y);
-
-        // King moves only 1 square
-        if (xDiff <= 1 && yDiff <= 1) {
-            // Cannot stay in the same square
-            if (xDiff == 0 && yDiff == 0) return false;
-
-            // Check what is at the destination using the Board's logic
+        if (xDiff <= 1 && yDiff <= 1 && !(xDiff == 0 && yDiff == 0)) {
             Piece target = board.getPieceAt(endX, endY);
-            
-            // If square is empty OR has an enemy, move is valid
-            if (target == null || target.isWhite() != this.isWhite) {
-                return true; 
-            }
+            return target == null || target.isWhite() != this.isWhite;
         }
         return false;
     }
 }
-
-
-
