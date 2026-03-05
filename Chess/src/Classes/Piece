@@ -1,8 +1,8 @@
-import javax.swing.*;
+import javax.swing.JButton;
 
 public abstract class Piece {
     protected boolean isWhite;
-    protected int x, y; 
+    protected int x, y;
 
     public Piece(boolean isWhite, int x, int y) {
         this.isWhite = isWhite;
@@ -11,9 +11,7 @@ public abstract class Piece {
     }
 
     public void display(JButton button) {
-        String className = this.getClass().getSimpleName();
-        // Uses 'N' for Knight to avoid conflict with 'K' for King
-        String name = className.equals("Knight") ? "N" : className.substring(0, 1);
+        String name = this.getClass().getSimpleName().substring(0, 1);
         button.setText((isWhite ? "W" : "B") + name);
     }
 
@@ -23,6 +21,5 @@ public abstract class Piece {
     }
 
     public boolean isWhite() { return isWhite; }
-    
     public abstract boolean isValidMove(Board board, int endX, int endY);
 }
