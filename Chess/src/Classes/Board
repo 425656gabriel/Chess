@@ -1,6 +1,9 @@
+import javax.swing.*;
+import java.awt.*;
+
 public class Board extends JFrame {
     private JButton[][] buttons = new JButton[8][8];
-    private Piece[][] logicBoard = new Piece[8][8]; // OBJECTIVE: Object Collection
+    private Piece[][] logicBoard = new Piece[8][8]; 
     private Piece selectedPiece = null;
     private boolean whiteTurn = true;
 
@@ -28,23 +31,41 @@ public class Board extends JFrame {
     }
 
     private void setupInitialPieces() {
-        // OBJECTIVE: Object Instantiation
-        logicBoard[0][4] = new King(false, 0, 4);
+        // Power Pieces
+        logicBoard[0][0] = new Rook(false, 0, 0);
+        logicBoard[0][1] = new Knight(false, 0, 1);
+        logicBoard[0][2] = new Bishop(false, 0, 2);
         logicBoard[0][3] = new Queen(false, 0, 3);
-        logicBoard[7][4] = new King(true, 7, 4);
+        logicBoard[0][4] = new King(false, 0, 4);
+        logicBoard[0][5] = new Bishop(false, 0, 5);
+        logicBoard[0][6] = new Knight(false, 0, 6);
+        logicBoard[0][7] = new Rook(false, 0, 7);
+
+        logicBoard[7][0] = new Rook(true, 7, 0);
+        logicBoard[7][1] = new Knight(true, 7, 1);
+        logicBoard[7][2] = new Bishop(true, 7, 2);
         logicBoard[7][3] = new Queen(true, 7, 3);
+        logicBoard[7][4] = new King(true, 7, 4);
+        logicBoard[7][5] = new Bishop(true, 7, 5);
+        logicBoard[7][6] = new Knight(true, 7, 6);
+        logicBoard[7][7] = new Rook(true, 7, 7);
+
+        // Pawns
+        for (int i = 0; i < 8; i++) {
+            logicBoard[1][i] = new Pawn(false, 1, i);
+            logicBoard[6][i] = new Pawn(true, 6, i);
+        }
     }
 
     private void handleInput(int r, int c) {
         if (selectedPiece == null) {
             Piece p = logicBoard[r][c];
-            if (p != null && p.isWhite == whiteTurn) {
+            if (p != null && p.isWhite() == whiteTurn) {
                 selectedPiece = p;
                 buttons[r][c].setBorder(BorderFactory.createLineBorder(Color.YELLOW, 4));
             }
         } else {
             if (selectedPiece.isValidMove(this, r, c)) {
-                // REQUIRED OBJECTIVE: Call behavioral move()
                 logicBoard[selectedPiece.x][selectedPiece.y] = null;
                 selectedPiece.move(r, c); 
                 logicBoard[r][c] = selectedPiece;
@@ -62,7 +83,6 @@ public class Board extends JFrame {
                 buttons[i][j].setText("");
                 buttons[i][j].setBorder(null);
                 if (logicBoard[i][j] != null) {
-                    // REQUIRED OBJECTIVE: Call functional display()
                     logicBoard[i][j].display(buttons[i][j]);
                 }
             }
