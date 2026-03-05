@@ -2,7 +2,7 @@ import javax.swing.*;
 
 public abstract class Piece {
     protected boolean isWhite;
-    protected int x, y; // Current position on the grid
+    protected int x, y; 
 
     public Piece(boolean isWhite, int x, int y) {
         this.isWhite = isWhite;
@@ -10,23 +10,19 @@ public abstract class Piece {
         this.y = y;
     }
 
-    // OBJECTIVE: Functional display() method
-    // This allows the object to "show" itself on the button
     public void display(JButton button) {
-        String name = this.getClass().getSimpleName().substring(0, 1);
+        String className = this.getClass().getSimpleName();
+        // Uses 'N' for Knight to avoid conflict with 'K' for King
+        String name = className.equals("Knight") ? "N" : className.substring(0, 1);
         button.setText((isWhite ? "W" : "B") + name);
     }
 
-    // OBJECTIVE: Behavioral move() method
-    // This updates the object's state (replaces setPosition)
     public void move(int nextX, int nextY) {
         this.x = nextX;
         this.y = nextY;
     }
 
     public boolean isWhite() { return isWhite; }
-    public boolean isBlack() { return !isWhite; }
     
-    // Every piece (King, Rook, etc.) must implement this math
     public abstract boolean isValidMove(Board board, int endX, int endY);
 }
