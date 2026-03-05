@@ -8,7 +8,7 @@ public class Board extends JFrame {
     private boolean whiteTurn = true;
 
     public Board() {
-        setTitle("Chess Game - White's Turn");
+        setTitle("Chess - King and Queen Only");
         setSize(600, 600);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         JPanel grid = new JPanel(new GridLayout(8, 8));
@@ -16,6 +16,7 @@ public class Board extends JFrame {
         for (int r = 0; r < 8; r++) {
             for (int c = 0; c < 8; c++) {
                 buttons[r][c] = new JButton();
+                // Checkerboard coloring
                 if ((r + c) % 2 == 0) buttons[r][c].setBackground(Color.WHITE);
                 else buttons[r][c].setBackground(new Color(119, 148, 85));
                 
@@ -31,30 +32,13 @@ public class Board extends JFrame {
     }
 
     private void setupInitialPieces() {
-        // Power Pieces
-        logicBoard[0][0] = new Rook(false, 0, 0);
-        logicBoard[0][1] = new Knight(false, 0, 1);
-        logicBoard[0][2] = new Bishop(false, 0, 2);
+        // Black pieces (Row 0)
         logicBoard[0][3] = new Queen(false, 0, 3);
         logicBoard[0][4] = new King(false, 0, 4);
-        logicBoard[0][5] = new Bishop(false, 0, 5);
-        logicBoard[0][6] = new Knight(false, 0, 6);
-        logicBoard[0][7] = new Rook(false, 0, 7);
 
-        logicBoard[7][0] = new Rook(true, 7, 0);
-        logicBoard[7][1] = new Knight(true, 7, 1);
-        logicBoard[7][2] = new Bishop(true, 7, 2);
+        // White pieces (Row 7)
         logicBoard[7][3] = new Queen(true, 7, 3);
         logicBoard[7][4] = new King(true, 7, 4);
-        logicBoard[7][5] = new Bishop(true, 7, 5);
-        logicBoard[7][6] = new Knight(true, 7, 6);
-        logicBoard[7][7] = new Rook(true, 7, 7);
-
-        // Pawns
-        for (int i = 0; i < 8; i++) {
-            logicBoard[1][i] = new Pawn(false, 1, i);
-            logicBoard[6][i] = new Pawn(true, 6, i);
-        }
     }
 
     private void handleInput(int r, int c) {
@@ -66,11 +50,14 @@ public class Board extends JFrame {
             }
         } else {
             if (selectedPiece.isValidMove(this, r, c)) {
+                // Execute Move
                 logicBoard[selectedPiece.x][selectedPiece.y] = null;
                 selectedPiece.move(r, c); 
                 logicBoard[r][c] = selectedPiece;
+                
+                // Switch Turns
                 whiteTurn = !whiteTurn;
-                setTitle("Chess Game - " + (whiteTurn ? "White's Turn" : "Black's Turn"));
+                setTitle("Chess - " + (whiteTurn ? "White's Turn" : "Black's Turn"));
             }
             selectedPiece = null;
             updateUI();
