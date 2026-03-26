@@ -17,4 +17,9 @@ public class Queen extends Piece {
         Piece target = board.getPieceAt(endX, endY);
         return target == null || target.isWhite() != this.isWhite;
     }
+
+    @Override
+    public void display(javax.swing.JButton button) {
+        button.setText(isWhite ? "♕" : "♛");
+    }
 }
