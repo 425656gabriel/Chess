@@ -1,7 +1,8 @@
 
 ## Chess
-
 This is a chess simulator. You can choose the difficulty and improve your chess skills.
+Press "START GAME" to start and "Restart Game" to start a new game.
+
 ## Controls
 - Click a piece to select it.
 - Click a square to move the piece if the move is valid.
@@ -12,6 +13,7 @@ This program is a two-player chess game made in Java using Processing. Players s
 ## Team Contributions
 - Abed: Wrote the main code, including the board, piece classes, and game logic.
 - Gabriel: Created the pictures for the chess pieces and helped fix/debug the code.
+  
 UML Diagram:
 ![UML Diagram](https://github.com/425656gabriel/Chess/blob/main/Chess/src/Class%20Diagrams/MainScreenUML.png)
 
