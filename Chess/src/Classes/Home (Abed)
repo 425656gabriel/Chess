@@ -1,3 +1,4 @@
+package Chess;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
@@ -49,7 +50,7 @@ public class Home extends JFrame {
         gbc.insets = new Insets(15, 0, 15, 0);
 
         // Play Button
-        JButton playBtn = createStyledButton("START 2 PLAYER GAME", accentGreen);
+        JButton playBtn = createStyledButton("START GAME", accentGreen);
         playBtn.addActionListener(e -> {
             this.dispose(); // Close Menu
             new Board();    // Open Game
@@ -90,5 +91,7 @@ public class Home extends JFrame {
         });
         
         return btn;
+    }
+}
     }
 }
