@@ -10,4 +10,9 @@ public class King extends Piece {
         }
         return false;
     }
+    
+    @Override
+    public void display(javax.swing.JButton button) {
+        button.setText(isWhite ? "♔" : "♚");
+    }
 }
