@@ -1,14 +1,14 @@
 
 # ♟️ Chess Simulator
 
-## 📌 Overview
+## Overview
 The **Chess Simulator** is a two-player chess application developed in **Java using Processing**. It provides an interactive environment where users can practice and improve their chess skills while following official chess rules.
 
 The program is designed with a focus on simplicity, usability, and correctness. Players interact with the game through a graphical interface, and all moves are validated before being executed to ensure fair gameplay.
 
 ---
 
-## 🎮 Features
+## Features
 - Interactive chessboard with graphical pieces  
 - Turn-based two-player gameplay  
 - Move validation based on standard chess rules  
@@ -18,7 +18,7 @@ The program is designed with a focus on simplicity, usability, and correctness. 
 
 ---
 
-## 🕹️ Controls
+## Controls
 - Click on a chess piece to select it  
 - Click on a destination square to move the piece  
 - Moves are executed only if they are valid  
@@ -28,7 +28,7 @@ The program is designed with a focus on simplicity, usability, and correctness. 
 
 ---
 
-## ⚙️ How It Works
+## How It Works
 The program is built using object-oriented programming principles. Each chess piece is implemented as a class with its own movement rules. The chessboard is represented as a grid that tracks the positions of all pieces.
 
 ### Move Process
@@ -42,13 +42,50 @@ This process ensures that all gameplay follows the rules of traditional chess.
 
 ---
 
-## 🧠 Technologies Used
+## Technologies Used
 - **Java** – Core programming language  
-- **Processing** – Graphics rendering and user interaction  
+ 
 
 ---
 
-## 📂 Project Structure
+
+---
+
+## 👥 Team Contributions
+
+### Abed
+- Developed the main architecture of the program  
+- Implemented the board system and piece classes  
+- Wrote the game logic and move validation  
+
+### Gabriel
+- Designed the graphical chess piece assets  
+- Assisted with debugging  
+- Helped improve overall performance and usability  
+
+---
+
+## Future Improvements
+- Add an AI opponent for single-player mode  
+- Implement check, checkmate, and stalemate detection  
+- Add move history and undo functionality  
+- Include timers for competitive gameplay  
+- Enhance UI with animations and sound effects  
+
+---
+
+## How to Run
+1. Install **Processing** or ensure Java is properly set up  
+2. Open the project in Processing or a Java IDE  
+3. Run the `Main.java` file  
+4. Click **Start Game** to begin playing  
+
+---
+
+## Conclusion
+This project demonstrates the application of object-oriented programming concepts in developing an interactive game. It also highlights teamwork in both development and design, providing a solid foundation for future improvements and expansions.
+
+---
 UML Diagram:
 ![UML Diagram](https://github.com/425656gabriel/Chess/blob/main/Chess/src/Class%20Diagrams/MainScreenUML.png)
 
