@@ -1,1 +1,9 @@
+@echo off
+echo Entering folders...
+cd Chess/src/Classes
+echo Compiling all Java files...
+javac *.java
+echo Starting the Game...
+java Chess
+pause
 
