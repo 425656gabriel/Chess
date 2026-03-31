@@ -86,6 +86,8 @@ This project demonstrates the application of object-oriented programming concept
 
 ---
 UML Diagram:
+## UML Diagram
+
 ```mermaid
 classDiagram
 
@@ -106,7 +108,7 @@ class Piece {
   -boolean isWhite
   -int x
   -int y
-  +isValidMove(...)
+  +isValidMove()
 }
 
 class Pawn
@@ -116,10 +118,9 @@ class Bishop
 class Queen
 class King
 
-Chess --> Home : starts
-Home --> Board : launches game
-
-Board --> Piece : uses
+Chess --> Home
+Home --> Board
+Board --> Piece
 
 Piece <|-- Pawn
 Piece <|-- Rook
