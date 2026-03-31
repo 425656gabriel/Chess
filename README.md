@@ -74,11 +74,10 @@ This process ensures that all gameplay follows the rules of traditional chess.
 
 ---
 
-## How to Run
-1. Install **Processing** or ensure Java is properly set up  
-2. Open the project in Processing or a Java IDE  
-3. Run the `Main.java` file  
-4. Click **Start Game** to begin playing  
+## How to Run 
+1. Open the project in Terminal or a Java IDE  
+2. Run the `Chess.java` file  
+3. Click **Start Game** to begin playing  
 
 ---
 
@@ -87,8 +86,47 @@ This project demonstrates the application of object-oriented programming concept
 
 ---
 UML Diagram:
-![UML Diagram](https://github.com/425656gabriel/Chess/blob/main/Chess/src/Class%20Diagrams/MainScreenUML.png)
+```mermaid
+classDiagram
 
+class Chess {
+  +main(String[] args)
+}
+
+class Home {
+  +Home()
+  -createStyledButton(String, Color)
+}
+
+class Board {
+  +Board()
+}
+
+class Piece {
+  -boolean isWhite
+  -int x
+  -int y
+  +isValidMove(...)
+}
+
+class Pawn
+class Rook
+class Knight
+class Bishop
+class Queen
+class King
+
+Chess --> Home : starts
+Home --> Board : launches game
+
+Board --> Piece : uses
+
+Piece <|-- Pawn
+Piece <|-- Rook
+Piece <|-- Knight
+Piece <|-- Bishop
+Piece <|-- Queen
+Piece <|-- King
 Gameplay:
 ![Start Screen](https://github.com/425656gabriel/App-Ideas/blob/main/Chess/src/GUI%20Mockups/Start%20Screen.png)
 ![Main Screen](https://github.com/425656gabriel/App-Ideas/blob/main/Chess/src/GUI%20Mockups/Mainscreen.png)
