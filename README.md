@@ -93,3 +93,5 @@ This project demonstrates the application of object-oriented programming concept
 ![Homepage](https://github.com/425656gabriel/Chess/blob/main/UML/Homepage.png)
 ### Game
 ![Game](https://github.com/425656gabriel/Chess/blob/main/UML/Game.png)
+### Endgame 
+![Endgame](https://github.com/425656gabriel/Chess/blob/main/UML/Endgame.png)
