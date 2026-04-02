@@ -87,3 +87,7 @@ This project demonstrates the application of object-oriented programming concept
 ---
 ## UML Diagram
 ![UML](https://github.com/425656gabriel/Chess/blob/main/UML/ChessFinalUML.drawio.png)
+
+## Gameplay
+### Homepage
+![Homepage](https://github.com/425656gabriel/Chess/blob/main/UML/Homepage.png)
