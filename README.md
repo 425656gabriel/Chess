@@ -2,7 +2,7 @@
 # ♟️ Chess Simulator
 
 ## Overview
-The **Chess Simulator** is a two-player chess application developed in **Java using Processing**. It provides an interactive environment where users can practice and improve their chess skills while following official chess rules.
+The **Chess Simulator** is a two-player chess application developed in **Java**. It provides an interactive environment where users can practice and improve their chess skills while following official chess rules.
 
 The program is designed with a focus on simplicity, usability, and correctness. Players interact with the game through a graphical interface, and all moves are validated before being executed to ensure fair gameplay.
 
